@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>North Refineries Dashboard</title>
+
+  <style>
+    /* ===== شاشة تسجيل الدخول ===== */
+    #loginScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #1d3557;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      color: white;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .login-box {
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 12px;
+      width: 320px;
+      backdrop-filter: blur(6px);
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .login-box img {
+      width: 90px;
+      margin-bottom: 15px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .login-box button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
+      background: #457b9d;
+      color: white;
+      cursor: pointer;
+    }
+
+    #loginError {
+      display: none;
+      margin-top: 10px;
+      color: #ffb4b4;
+      font-size: 16px;
+    }
+  </style>
+
+<style>
+/* باقي CSS الخاص بالداشبورد (نفس كودك بدون تغيير) */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f4f6f8;
+  direction: rtl;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #1d3557;
+  color: white;
+  padding: 20px 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.header img {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: contain;
+  background: white;
+  padding: 5px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* ===== عنوان الصفحة ===== */
+h1 {
+  text-align: center;
+  margin: 30px 0 20px;
+  color: #333;
+  font-size: 28px;
+}
+
+/* ===== Container المصافي ===== */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  padding: 20px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 18px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card input {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+}
+
+/* ألوان المصافي */
+.sd1 { background-color: #0077b6; }
+.sd2 { background-color: #0096c7; }
+.north { background-color: #6a4c93; }
+.o7 { background-color: #e76f51; }
+
+/* زر الحساب */
+button {
+  margin: 25px auto;
+  display: block;
+  width: 300px;
+  padding: 15px;
+  background: #1d3557;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #457b9d;
+}
+
+/* ===== شريط أسعار النفط ===== */
+.oil-ticker {
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+  border-top: 3px solid #0ff;
+  border-bottom: 3px solid #0ff;
+  padding: 10px 0;
+  margin-top: 40px;
+}
+
+.oil-ticker p {
+  display: inline-block;
+  white-space: nowrap;
+  color: #0ff;
+  font-weight: bold;
+  animation: ticker 20s linear infinite;
+  font-size: 18px;
+}
+
+@keyframes ticker {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ===== بوكس النتائج ===== */
+.final-box {
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  background: #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  text-align: center;
+  font-size: 20px;
+}
+
+.final-box h3 {
+  margin-bottom: 15px;
+  color: #1d3557;
+}
+
+.final-box p {
+  margin: 8px 0;
+  font-weight: bold;
+}
+
+/* ===== Inputs السعر ===== */
+#oilPrice {
+  width: 200px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+  margin: 10px 0;
+  font-size: 18px;
+}
+
+/* ===== Employee Box ===== */
+.
+employee-box {
+  max-width: 300px;
+  margin: 20px auto;
+  padding: 15px 20px;
+  background-color: #87ceeb;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: left;
+  font-size: 16px;
+  color: #000;
+}
+
+.employee-box select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+</style>
+
+</head>
+<body>
+
+<!-- ===== شاشة الدخول ===== -->
+<div id="loginScreen">
+  <div class="login-box">
+    <img src="nrc-logo.png">
+    <h3>تسجيل الدخول</h3>
+    <input id="loginPassword" type="password" placeholder="أدخل الباسوورد">
+    <button onclick="checkPassword()">دخول</button>
+    <div id="loginError">❌ الباسوورد غير صحيح</div>
+  </div>
+</div>
+
+<!-- ===== Header ===== -->
+<div class="header">
+  <img src="nrc-logo.png">
+  <h2>North Refineries Company</h2>
+</div>
+
+<h1>Daily Production Input</h1>
+
+<!-- ===== مصافي ===== -->
+<div class="container">
+  <div class="card sd1"><label>صلاح الدين 1</label><input type="number"></div>
+  <div class="card sd2"><label>صلاح الدين 2</label><input type="number"></div>
+  <div class="card north"><label>مصفى الشمال</label><input type="number"></div>
+  <div class="card o7"><label>O7</label><input type="number"></div>
+</div>
+
+<!-- ===== شريط النفط ===== -->
+<div class="oil-ticker">
+  <p>Brent Crude: $82.40 | WTI: $77.10 | OPEC: $80.55 | Basra Heavy: $75.90</p>
+</div>
+
+<!-- ===== حساب ===== -->
+<div class="calc-box">
+  <label>سعر برميل النفط:</label>
+  <input id="oilPrice" type="number">
+  <button onclick="calculateRevenue()">احسب القيمة</button>
+</div>
+
+<!-- ===== نتائج ===== -->
+<div class="final-box">
+  <h3>نتائج الإنتاج</h3>
+  <p id="totalBarrels">عدد البراميل: 0</p>
+  <p id="totalValue">القيمة بالدولار: $0</p>
+</div>
+
+<!-- ===== Employee ===== -->
+<div class="employee-box">
+  <select id="employeeSelect">
+    <option>اختار الموظف</option>
+    <option>Tech. Mahmood</option>
+    <option>Eng. Massara</option>
+  </select>
+</div>
+
+<script>
+const correctPassword = "1234";
+
+function checkPassword() {
+  let input = document.getElementById("loginPassword").value;
+  if (input === correctPassword) {
+    document.getElementById("loginScreen").style.display = "none";
+  } else {
+    document.getElementById("loginError").style.display = "block";
+  }
+}
+
+function calculateRevenue() {
+  const sd1 = Number(document.querySelector(".sd1 input").value);
+  const sd2 = Number(document.querySelector(".sd2 input").value);
+  const north = Number(document.querySelector(".north input").value);
+  const o7 = Number(document.querySelector(".o7 input").value);
+
+  const price = Number(document.getElementById("oilPrice").value);
+
+  const totalProduction = sd1 + sd2 + north + o7;
+  const totalValue = totalProduction * price;
+
+  document.getElementById("totalBarrels").innerText =
+    "عدد البراميل: " + totalProduction;
+
+  document.getElementById("totalValue").innerText =
+    "القيمة بالدولار: $" + totalValue;
+}
+</script>
+
+</body>
+</html>
